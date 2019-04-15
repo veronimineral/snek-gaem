@@ -68,6 +68,25 @@
         return false;
     }
 
+
+    window.onclick = function (event) {
+        var popout = document.getElementById('popout');
+        if (event.target == popout) {
+            popout.style.display = "none";
+        }
+    }
+
+    function showScorePopout(score) {
+        var popout = document.getElementById('popout');
+        popout.style.display = "block";
+        popout.innerHTML = `<div class="endgameInfo">
+    <h2>Oh no, your snek died!</h2><p>Score: ` + score + `</p></div>`;
+
+
+    }
+
+
+
     function draw() {
         var bcgrnd = ctx.createPattern(backgroundImg, 'repeat'); // Create a pattern with this image, and set it to "repeat".
         ctx.fillStyle = bcgrnd;
@@ -137,6 +156,7 @@
         if (headX < square || headX > 27 * square || headY < 6 * square || headY > 27 * square || isCollision(newHead, snake) == true) {
             clearInterval(gameInterval);
             gameoverSound.play();
+            showScorePopout(score);
         }
 
         snake.unshift(newHead);
@@ -150,15 +170,30 @@
     }
     let gameInterval = setInterval(draw, 100);
 
+    function eventFire(el, etype) {
+        if (el.fireEvent) {
+            el.fireEvent('on' + etype);
+        } else {
+            var evObj = document.createEvent('Events');
+            evObj.initEvent(etype, true, false);
+            el.dispatchEvent(evObj);
+        }
+    }
+
+
+
+
 
     var start = document.getElementById('btn__play');
     start.addEventListener("click", function () {
+
         document.getElementById('game-canvas').style.display = "block";
-    }, false);
+    });
 
 
     var restart = document.getElementById('btn__restart');
     restart.addEventListener("click", function () {
-        location.reload();
+
+
     }, false);
 })();
